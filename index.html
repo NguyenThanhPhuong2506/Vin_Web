@@ -5,21 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script>
-function showChapter(chapterId) {
-    // Ẩn tất cả các chương
-    document.querySelectorAll(".chapter").forEach(el => el.style.display = "none");
+function toggleAccordion(id) {
+    let content = document.getElementById(id);
+    
+    // Kiểm tra nếu accordion đang ẩn thì hiển thị, ngược lại thì ẩn
+    if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
+}
 
-    // Hiện chương được chọn
+// Hiển thị nội dung chương và lưu chỉnh sửa
+function showChapter(chapterId) {
+    document.querySelectorAll(".chapter").forEach(el => el.style.display = "none");
     document.getElementById(chapterId).style.display = "block";
 }
 
-// Lưu nội dung vào LocalStorage
+// Lưu nội dung vào LocalStorage khi chỉnh sửa
 function saveContent(chapterId) {
     let content = document.getElementById(chapterId).innerHTML;
     localStorage.setItem(chapterId, content);
 }
 
-// Load nội dung từ LocalStorage khi mở trang
+// Tải nội dung từ LocalStorage khi mở trang
 function loadContent() {
     document.querySelectorAll(".chapter").forEach(el => {
         let savedContent = localStorage.getItem(el.id);
@@ -27,18 +36,30 @@ function loadContent() {
     });
 }
 
-// Load nội dung khi mở trang
 window.onload = loadContent;
 </script>
+<style>
+/* Định dạng accordion */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+</style>
 </head>
 <body>
 
 <!-- Sidebar -->
 <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
   <h3 class="w3-bar-item">KHÓA HỌC DYNAMO</h3>
-  <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter1')">CHƯƠNG 1</a>
-  <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter2')">CHƯƠNG 2</a>
-  <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter3')">CHƯƠNG 3</a>
+  <button class="w3-button w3-block w3-left-align" onclick="toggleAccordion('accordionChapters')">
+    Các Chương <i class="fa fa-caret-down"></i>
+  </button>
+  <div id="accordionChapters" class="accordion-content w3-white w3-card">
+    <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter1')">CHƯƠNG 1</a>
+    <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter2')">CHƯƠNG 2</a>
+    <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter3')">CHƯƠNG 3</a>
+  </div>
 </div>
 
 <!-- Page Content -->
