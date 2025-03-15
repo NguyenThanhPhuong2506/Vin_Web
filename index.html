@@ -4,27 +4,42 @@
 <title>KHÓA HỌC DYNAMO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script>
-function toggleAccordion(id) {
+  
+  function toggleAccordion(id) {
     let content = document.getElementById(id);
-    
-    // Kiểm tra nếu accordion đang ẩn thì hiển thị, ngược lại thì ẩn
-    if (content.style.maxHeight) {
-        content.style.maxHeight = null;
+    content.classList.toggle("active");
+
+    let icon = document.getElementById("icon" + id);
+    if (content.classList.contains("active")) {
+        content.style.maxHeight = content.scrollHeight + "px"; 
+        icon.classList.remove("fa-caret-down");
+        icon.classList.add("fa-caret-up");
     } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+        content.style.maxHeight = null; 
+        icon.classList.remove("fa-caret-up");
+        icon.classList.add("fa-caret-down");
     }
 }
 
 // Hiển thị nội dung chương và lưu chỉnh sửa
 function showChapter(chapterId) {
-    document.querySelectorAll(".chapter").forEach(el => el.style.display = "none");
-    document.getElementById(chapterId).style.display = "block";
+    document.querySelectorAll(".chapter").forEach(el => {
+        el.style.opacity = "0";
+        setTimeout(() => { el.style.display = "none"; }, 300);
+    });
+
+    let chapter = document.getElementById(chapterId);
+    setTimeout(() => {
+        chapter.style.display = "block";
+        chapter.style.opacity = "1";
+    }, 300);
 }
 
 // Lưu nội dung vào LocalStorage khi chỉnh sửa
 function saveContent(chapterId) {
-    let content = document.getElementById(chapterId).innerHTML;
+    let content = document.getElementById(chapterId).innerText;
     localStorage.setItem(chapterId, content);
 }
 
@@ -32,29 +47,55 @@ function saveContent(chapterId) {
 function loadContent() {
     document.querySelectorAll(".chapter").forEach(el => {
         let savedContent = localStorage.getItem(el.id);
-        if (savedContent) el.innerHTML = savedContent;
+        if (savedContent) el.innerText = savedContent;
     });
 }
 
+function clearSavedContent() {
+    localStorage.clear();
+    location.reload();
+}
 window.onload = loadContent;
 </script>
+
 <style>
 /* Định dạng accordion */
 .accordion-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.accordion-content.active {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.w3-sidebar {
+    background-color: #f8f9fa; 
+    border-right: 2px solid #ddd;
+}
+
+.w3-bar-item:hover {
+    background-color: #ddd !important;
+    transition: background 0.3s ease-in-out;
+}
+
+.chapter {
+    transition: opacity 0.3s ease-in-out;
 }
 </style>
 </head>
 <body>
 
 <!-- Sidebar -->
+ 
 <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
   <h3 class="w3-bar-item">KHÓA HỌC DYNAMO</h3>
   <button class="w3-button w3-block w3-left-align" onclick="toggleAccordion('accordionChapters')">
-    Các Chương <i class="fa fa-caret-down"></i>
-  </button>
+    Các Chương <i id="iconaccordionChapters" class="fa fa-caret-down"></i>
+</button>
   <div id="accordionChapters" class="accordion-content w3-white w3-card">
     <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter1')">CHƯƠNG 1</a>
     <a href="#" class="w3-bar-item w3-button" onclick="showChapter('chapter2')">CHƯƠNG 2</a>
@@ -65,28 +106,28 @@ window.onload = loadContent;
 <!-- Page Content -->
 <div style="margin-left:25%">
   <div class="w3-container w3-teal">
-    <h1>KHÓA HỌC DYNAMO</h1>
+    <h1>KHÓA HỌC DYNAMO VTK_VINHOMES</h1>
   </div>
 
   <!-- CHƯƠNG 1 -->
   <div class="w3-container chapter" id="chapter1" contenteditable="true" oninput="saveContent('chapter1')">
     <h2>CHƯƠNG 1: Giới thiệu về Dynamo</h2>
     <p>Đây là nội dung của chương 1...</p>
-    <img src="images/Dynamo1.png" alt="Chương 1" style="width:100%">
+    <img src="images/same-value-32.png" alt="Chương 1" style="width:1%">
   </div>
 
   <!-- CHƯƠNG 2 -->
   <div class="w3-container chapter" id="chapter2" contenteditable="true" oninput="saveContent('chapter2')" style="display:none;">
     <h2>CHƯƠNG 2: Các công cụ cơ bản</h2>
     <p>Đây là nội dung của chương 2...</p>
-    <img src="images/Dynamo2.png" alt="Chương 2" style="width:100%">
+    <img src="images/same-value-32.png" alt="Chương 2" style="width:1%">
   </div>
 
   <!-- CHƯƠNG 3 -->
   <div class="w3-container chapter" id="chapter3" contenteditable="true" oninput="saveContent('chapter3')" style="display:none;">
     <h2>CHƯƠNG 3: Ứng dụng thực tế</h2>
     <p>Đây là nội dung của chương 3...</p>
-    <img src="images/Dynamo3.png" alt="Chương 3" style="width:100%">
+    <img src="images/same-value-32.png" alt="Chương 3" style="width:1%">
   </div>
 </div>
 
